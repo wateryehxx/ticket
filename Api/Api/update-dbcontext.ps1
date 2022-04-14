@@ -1,0 +1,2 @@
+﻿$Project = "C:\git\ticket\Api\DbContext\DbContext.csproj"
+dotnet ef --project $Project --startup-project $Project dbcontext scaffold "Server=DESKTOP-KL8LB5T\SQLEXPRESS;Initial Catalog=Ticket;Persist Security Info=False;Integrated Security=true;" Microsoft.EntityFrameworkCore.SqlServer --output-dir "Ticket\Tables" --context-dir "Ticket" --context "TicketContext" --force
