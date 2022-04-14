@@ -1,5 +1,9 @@
-﻿namespace Api.Models.UserController;
+﻿using System.ComponentModel.DataAnnotations;
+using Domain.UserRepository;
 
-public class Logout
+namespace Api.Models.UserController;
+
+public class Logout : ILogoutDto
 {
+    [Required] public Guid UserId { get; set; }
 }

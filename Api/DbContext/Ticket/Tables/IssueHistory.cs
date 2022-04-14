@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace DbContext.Ticket.Tables;
 
-namespace DbContext.Ticket.Tables
+public class IssueHistory
 {
-    public partial class IssueHistory
-    {
-        public Guid IssueHistoryId { get; set; }
-        public Guid IssueId { get; set; }
-        public Guid UserId { get; set; }
-        public int IssueStatusId { get; set; }
-        public DateTime CreateTime { get; set; }
+    public Guid IssueHistoryId { get; set; }
+    public Guid IssueId { get; set; }
+    public Guid UserId { get; set; }
+    public int IssueStatusId { get; set; }
+    public DateTime CreateTime { get; set; }
 
-        public virtual Issue Issue { get; set; } = null!;
-        public virtual IssueStatus IssueStatus { get; set; } = null!;
-        public virtual User User { get; set; } = null!;
-    }
+    public virtual Issue Issue { get; set; } = null!;
+    public virtual IssueStatus IssueStatus { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 }

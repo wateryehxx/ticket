@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace DbContext.Ticket.Tables;
 
-namespace DbContext.Ticket.Tables
+public class Role
 {
-    public partial class Role
+    public Role()
     {
-        public Role()
-        {
-            Users = new HashSet<User>();
-        }
-
-        public int RoleId { get; set; }
-        public string Name { get; set; } = null!;
-
-        public virtual ICollection<User> Users { get; set; }
+        Users = new HashSet<User>();
     }
+
+    public int RoleId { get; set; }
+    public string Name { get; set; } = null!;
+
+    public virtual ICollection<User> Users { get; set; }
 }

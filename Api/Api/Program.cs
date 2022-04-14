@@ -2,6 +2,8 @@ using System.Reflection;
 using Api.Middlewares;
 using Api.Models;
 using DbContext.Ticket;
+using Domain.IssueRepository;
+using Domain.UserRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.OpenApi.Models;
@@ -30,6 +32,9 @@ builder.Services.AddDbContextPool<TicketContext>(optionsBuilder =>
     logTo?.Invoke(optionsBuilder);
     optionsBuilder.UseSqlServer(options.ConnectionString!);
 });
+
+builder.Services.AddTransient<IIssueRepository, IssueRepositoryRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepositoryRepository>();
 
 var app = builder.Build();
 
