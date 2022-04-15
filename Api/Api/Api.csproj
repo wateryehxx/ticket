@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="JWT" Version="8.9.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.1"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1"/>

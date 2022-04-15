@@ -4,5 +4,5 @@ namespace Api.Models.UserController;
 
 public class LoginResponse
 {
-    [Required] public string Token { get; set; }
+    [Required] public string JwtAuth { get; set; }
 }

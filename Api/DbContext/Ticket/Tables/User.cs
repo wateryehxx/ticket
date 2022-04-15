@@ -1,19 +1,23 @@
-﻿namespace DbContext.Ticket.Tables;
+﻿using System;
+using System.Collections.Generic;
 
-public class User
+namespace DbContext.Ticket.Tables
 {
-    public User()
+    public partial class User
     {
-        IssueHistories = new HashSet<IssueHistory>();
-        Issues = new HashSet<Issue>();
+        public User()
+        {
+            IssueHistories = new HashSet<IssueHistory>();
+            Issues = new HashSet<Issue>();
+        }
+
+        public Guid UserId { get; set; }
+        public int RoleId { get; set; }
+        public string Name { get; set; } = null!;
+        public string Password { get; set; } = null!;
+
+        public virtual Role Role { get; set; } = null!;
+        public virtual ICollection<IssueHistory> IssueHistories { get; set; }
+        public virtual ICollection<Issue> Issues { get; set; }
     }
-
-    public Guid UserId { get; set; }
-    public int RoleId { get; set; }
-    public string Name { get; set; } = null!;
-    public string Password { get; set; } = null!;
-
-    public virtual Role Role { get; set; } = null!;
-    public virtual ICollection<IssueHistory> IssueHistories { get; set; }
-    public virtual ICollection<Issue> Issues { get; set; }
 }

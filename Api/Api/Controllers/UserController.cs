@@ -1,6 +1,9 @@
+using Api.Models;
 using Api.Models.UserController;
 using DbContext.Ticket;
 using Domain.UserRepository;
+using JWT.Algorithms;
+using JWT.Builder;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -10,10 +13,13 @@ namespace Api.Controllers;
 public class UserController : ControllerBase
 {
     private readonly TicketContext _db;
+    private readonly Options _options;
     private readonly IUserRepository _userRepository;
 
-    public UserController(TicketContext db, IUserRepository userRepository)
+    public UserController(Microsoft.Extensions.Options.IOptions<Options> options, TicketContext db,
+        IUserRepository userRepository)
     {
+        _options = options.Value;
         _db = db;
         _userRepository = userRepository;
     }
@@ -27,7 +33,16 @@ public class UserController : ControllerBase
     public async Task<LoginResponse> _([FromBody] Login dto)
     {
         var user = await _userRepository.Login(dto);
-        return new LoginResponse();
+        return new LoginResponse
+        {
+            JwtAuth = JwtBuilder.Create()
+                .WithAlgorithm(new HMACSHA256Algorithm())
+                .WithSecret(_options.Jwt.Secret)
+                .AddClaim("exp", DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds())
+                .AddClaim(nameof(user.UserId), user.UserId)
+                .AddClaim(nameof(user.RoleId), user.RoleId)
+                .Encode()
+        };
     }
 
     /// <summary>

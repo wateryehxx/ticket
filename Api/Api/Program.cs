@@ -1,4 +1,5 @@
 using System.Reflection;
+using Api.Infrastructures;
 using Api.Middlewares;
 using Api.Models;
 using DbContext.Ticket;
@@ -24,7 +25,33 @@ builder.Services.AddSwaggerGen(options =>
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
 });
+
+builder.Services.Configure<Options>(section);
 
 Action<DbContextOptionsBuilder>? logTo = null;
 builder.Services.AddDbContextPool<TicketContext>(optionsBuilder =>
@@ -33,6 +60,7 @@ builder.Services.AddDbContextPool<TicketContext>(optionsBuilder =>
     optionsBuilder.UseSqlServer(options.ConnectionString!);
 });
 
+builder.Services.AddScoped<IJwtAuth, JwtAuth>();
 builder.Services.AddTransient<IIssueRepository, IssueRepositoryRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepositoryRepository>();
 
@@ -52,6 +80,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionHandler>();
+app.UseMiddleware<JwtHandler>();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
