@@ -1,9 +1,8 @@
-using Api.Models;
+using Api.Infrastructures;
 using Api.Models.UserController;
 using DbContext.Ticket;
+using Domain;
 using Domain.UserRepository;
-using JWT.Algorithms;
-using JWT.Builder;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -13,13 +12,13 @@ namespace Api.Controllers;
 public class UserController : ControllerBase
 {
     private readonly TicketContext _db;
-    private readonly Options _options;
+    private readonly IJwtAuth _jwtAuth;
     private readonly IUserRepository _userRepository;
 
-    public UserController(Microsoft.Extensions.Options.IOptions<Options> options, TicketContext db,
+    public UserController(IJwtAuth jwtAuth, TicketContext db,
         IUserRepository userRepository)
     {
-        _options = options.Value;
+        _jwtAuth = jwtAuth;
         _db = db;
         _userRepository = userRepository;
     }
@@ -35,13 +34,7 @@ public class UserController : ControllerBase
         var user = await _userRepository.Login(dto);
         return new LoginResponse
         {
-            JwtAuth = JwtBuilder.Create()
-                .WithAlgorithm(new HMACSHA256Algorithm())
-                .WithSecret(_options.Jwt.Secret)
-                .AddClaim("exp", DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds())
-                .AddClaim(nameof(user.UserId), user.UserId)
-                .AddClaim(nameof(user.RoleId), user.RoleId)
-                .Encode()
+            JwtAuth = _jwtAuth.Encrypt(user)
         };
     }
 
@@ -62,6 +55,7 @@ public class UserController : ControllerBase
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost("Create")]
+    [TypeFilter(typeof(Authorize), Arguments = new object[] {Role.Admin})]
     public async Task<OkResult> _([FromBody] CreateUser dto)
     {
         await _userRepository.Create(dto);
@@ -75,6 +69,7 @@ public class UserController : ControllerBase
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPut("Update")]
+    [TypeFilter(typeof(Authorize), Arguments = new object[] {Role.Admin})]
     public async Task<OkResult> _([FromBody] UpdateUser dto)
     {
         await _userRepository.Update(dto);
@@ -88,6 +83,7 @@ public class UserController : ControllerBase
     /// <param name="userId"></param>
     /// <returns></returns>
     [HttpDelete("Delete")]
+    [TypeFilter(typeof(Authorize), Arguments = new object[] {Role.Admin})]
     public async Task<OkResult> _(Guid userId)
     {
         _userRepository.Delete(userId);

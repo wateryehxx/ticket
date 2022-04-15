@@ -1,4 +1,5 @@
 ﻿using Api.Models;
+using DbContext.Ticket.Tables;
 using JWT.Algorithms;
 using JWT.Builder;
 
@@ -25,5 +26,16 @@ public class JwtAuth : IJwtAuth
             .Decode<IDictionary<string, object>>(bearer);
         UserId = Guid.Parse(payload[nameof(UserId)].ToString() ?? string.Empty);
         RoleId = int.Parse(payload[nameof(RoleId)].ToString() ?? string.Empty);
+    }
+
+    public string Encrypt(User user)
+    {
+        return JwtBuilder.Create()
+            .WithAlgorithm(new HMACSHA256Algorithm())
+            .WithSecret(_options.Jwt.Secret)
+            .AddClaim("exp", DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds())
+            .AddClaim(nameof(user.UserId), user.UserId)
+            .AddClaim(nameof(user.RoleId), user.RoleId)
+            .Encode();
     }
 }
