@@ -34,6 +34,8 @@ namespace DbContext.Ticket
 
                 entity.Property(e => e.IssueId).ValueGeneratedNever();
 
+                entity.Property(e => e.Severity).HasMaxLength(10);
+
                 entity.Property(e => e.Summary).HasMaxLength(4000);
 
                 entity.Property(e => e.Title).HasMaxLength(100);

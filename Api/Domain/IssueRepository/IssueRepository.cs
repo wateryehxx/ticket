@@ -1,5 +1,6 @@
 ﻿using DbContext.Ticket;
 using DbContext.Ticket.Tables;
+using Domain.IssueRepository.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.IssueRepository;

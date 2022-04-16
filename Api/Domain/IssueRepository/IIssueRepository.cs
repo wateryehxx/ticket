@@ -1,4 +1,5 @@
 ﻿using DbContext.Ticket.Tables;
+using Domain.IssueRepository.Models;
 
 namespace Domain.IssueRepository;
 

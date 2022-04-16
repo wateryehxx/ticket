@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Domain.UserRepository;
+using Domain.UserRepository.Models;
 
 namespace Api.Models.UserController;
 

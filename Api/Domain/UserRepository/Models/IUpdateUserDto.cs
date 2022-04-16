@@ -1,7 +1,8 @@
-﻿namespace Domain.UserRepository;
+﻿namespace Domain.UserRepository.Models;
 
-public interface ICreateUserDto
+public interface IUpdateUserDto
 {
+    public Guid UserId { get; set; }
     public int RoleId { get; set; }
     public string Name { get; set; }
     public string Password { get; set; }

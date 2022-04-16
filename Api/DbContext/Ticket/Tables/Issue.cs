@@ -15,6 +15,8 @@ namespace DbContext.Ticket.Tables
         public int IssueStatusId { get; set; }
         public string Title { get; set; } = null!;
         public string Summary { get; set; } = null!;
+        public string Severity { get; set; } = null!;
+        public int Priority { get; set; }
 
         public virtual IssueStatus IssueStatus { get; set; } = null!;
         public virtual User User { get; set; } = null!;

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Domain.IssueRepository;
+using Domain.IssueRepository.Models;
 
 namespace Api.Models.IssueController;
 

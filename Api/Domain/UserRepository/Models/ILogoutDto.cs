@@ -1,4 +1,4 @@
-﻿namespace Domain.UserRepository;
+﻿namespace Domain.UserRepository.Models;
 
 public interface ILogoutDto
 {

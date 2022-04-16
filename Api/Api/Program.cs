@@ -80,7 +80,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionHandler>();
-app.UseMiddleware<JwtHandler>();
+app.UseMiddleware<Authenticate>();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

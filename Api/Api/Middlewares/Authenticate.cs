@@ -2,11 +2,11 @@
 
 namespace Api.Middlewares;
 
-public class JwtHandler
+public class Authenticate
 {
     private readonly RequestDelegate _next;
 
-    public JwtHandler(RequestDelegate next)
+    public Authenticate(RequestDelegate next)
     {
         _next = next;
     }
